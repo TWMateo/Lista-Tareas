@@ -7,18 +7,39 @@ import {
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState, useRef, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { añadirTarea } from "../redux/features/ListaTareasSlice";
+import format from "date-fns/format";
+import { es } from "date-fns/locale";
 
 const SearchBar = () => {
-  const [title, setTitle] = useState(" ");
+  const [startDate, setStartDate] = useState(new Date());
+  const [contentSelect, setContentSelect] = useState(false);
+  const fechaFormateada = format(startDate, "yyyy-MM-dd", { locale: es });
+  const [title, setTitle] = useState("");
   const [content, setContent] = useState(" ");
   const [openNote, setOpenNote] = useState(false);
   const inputRefNote = useRef(null);
+  const dispatch = useDispatch();
 
   const handleClick = () => {
     const fileInput = document.getElementById("file");
     if (fileInput) {
       fileInput.click();
     }
+  };
+
+  const handleClickAddTarea = () => {
+    const tarea = {
+      titulo: title,
+      fecha: fechaFormateada,
+      contenido: content,
+    };
+    dispatch(añadirTarea(tarea));
+    const  inputContenido = document.getElementById('inputContent')
+    const inputTitle = document.getElementById('inputTitle')
+    inputTitle.value = ""
+    inputContenido.value = ""
   };
 
   const handleClickCalendar = () => {
@@ -53,10 +74,14 @@ const SearchBar = () => {
       <div className="flex items-center w-full">
         <input
           type="text"
+          id="inputTitle"
           ref={inputRefNote}
           placeholder={openNote ? "Titulo" : "Crear una nota"}
           className="border w-[70%] border-black rounded-lg p-1 text-xl bg-pastel-green-100"
           onClick={handleClickNewNote}
+          onChange={(event) => {
+            setTitle(event.target.value);
+          }}
         />
         <input type="file" className="hidden m-0 p-0" id="file" />
         <input type="file" className="hidden m-0 p-0" id="photo" />
@@ -64,7 +89,7 @@ const SearchBar = () => {
         <a
           className="w-10 h-10 cursor-pointer rounded-full hover:bg-pastel-green-600
       transition-all duration-300 flex items-center"
-          onClick={handleClick}
+          onClick={handleClickAddTarea}
         >
           <FontAwesomeIcon icon={faPlus} className="w-[100%] h-6" />
         </a>
@@ -84,12 +109,37 @@ const SearchBar = () => {
           <ReactDatePicker
             id="calendar"
             className="hidden m-0 p-0"
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
           ></ReactDatePicker>
         </a>
       </div>
-      <input placeholder="Contenido..." ref={inputRefNote} className={`bg-pastel-green-100 ${openNote ? `absolute`:`hidden`} mt-32 w-[70%] md:w-[65%] lg:w-[38%] rounded-lg p-5`}>
-        {/* <input placeholder="Contenido..."></input> */}
-      </input>
+      <div
+        className={`bg-pastel-green-100 flex ${
+          openNote ? `absolute flex-col` : `hidden`
+        } mt-36 w-[70%] md:w-[65%] lg:w-[38%] rounded-lg p-2 gap-2`}
+      >
+        <div
+          className={`text-xs ${
+            contentSelect ? "relative" : "absolute"
+          } opacity-30`}
+        >
+          {startDate && contentSelect && fechaFormateada}
+        </div>
+        <input
+          id="inputContent"
+          placeholder="Contenido"
+          ref={inputRefNote}
+          className="w-[99%] h-full p-2  bg-pastel-green-100 text-xs rounded-md"
+          onChange={(event) => {
+            setContent(event.target.value);
+          }}
+          onFocus={() => {
+            setContentSelect(true);
+          }}
+          onBlur={() => setContentSelect(false)}
+        />
+      </div>
     </div>
   );
 };
