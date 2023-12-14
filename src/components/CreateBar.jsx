@@ -9,13 +9,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { añadirTarea } from "../redux/features/ListaTareasSlice";
-import format from "date-fns/format";
-import { es } from "date-fns/locale";
+import { formatearContenido, formatearFecha } from "../helpers/helper";
 
 const SearchBar = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [contentSelect, setContentSelect] = useState(false);
-  const fechaFormateada = format(startDate, "yyyy-MM-dd", { locale: es });
+  const fechaFormateada = formatearFecha(startDate);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState(" ");
   const [openNote, setOpenNote] = useState(false);
@@ -30,10 +29,11 @@ const SearchBar = () => {
   };
 
   const handleClickAddTarea = () => {
+    const contenidoFormateado = formatearContenido(content,10);
     const tarea = {
       titulo: title,
       fecha: fechaFormateada,
-      contenido: content,
+      contenido: contenidoFormateado,
     };
     dispatch(añadirTarea(tarea));
     const  inputContenido = document.getElementById('inputContent')
@@ -53,12 +53,14 @@ const SearchBar = () => {
     setOpenNote(true);
   };
 
+  //Creación de un evento para el elemento referenciado
   const handleClickOutside = (event) => {
     if (inputRefNote.current && !inputRefNote.current.contains(event.target)) {
       setOpenNote(false);
     }
   };
 
+  //El evento se añade directamente al documento
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     //Es una buena practica para mantener un rendimiento optimo de la app
