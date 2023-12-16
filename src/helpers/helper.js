@@ -18,3 +18,8 @@ export const formatearContenido = (contenido,cantidadCaracteres) => {
     }
     return nuevoContenido;
 }
+
+export const acortadorTexto = (contenido,tamaño) =>{
+    let contenidoAcortado = contenido.substring(0,tamaño)
+    return contenidoAcortado    
+}

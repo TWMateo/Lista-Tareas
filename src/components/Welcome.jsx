@@ -8,7 +8,7 @@ const Welcome = () => {
   return (
     <div className="h-full w-full flex flex-col items-center gap-2 mt-2 mb-5 md:ml-10">
       <SearchBar />
-      <div className={`border border-black w-[70%] lg:w-[80%] ${listaTareas.length ? `h-full` : `h-[70%]`} rounded-2xl bg-pastel-green-400 grid sm:grid-rows-[auto,auto,auto,auto] xl:grid-cols-4`}>
+      <div className={`p-1 border border-black w-[70%] lg:w-[80%] ${listaTareas.length ? `h-full` : `h-[70%]`} rounded-2xl bg-pastel-green-400 grid sm:grid-rows-[auto,auto,auto,auto] xl:grid-cols-4`}>
         {listaTareas && listaTareas.map((tarea, index)=>(
           <Tarea titulo={tarea.titulo} fecha={tarea.fecha} contenido={tarea.contenido} key={index}/>
         ))

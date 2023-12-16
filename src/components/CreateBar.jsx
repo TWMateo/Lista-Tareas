@@ -72,7 +72,7 @@ const SearchBar = () => {
   }, []);
 
   return (
-    <div className="w-[70%] lg:w-[40%] h-14 bg-pastel-green-400 rounded-xl flex flex-col justify-center items-center p-3 gap-3">
+    <div className="sticky top-0 border border-black w-[70%] lg:w-[40%] h-14 bg-pastel-green-400 rounded-xl flex flex-col justify-center items-center p-3 gap-3">
       <div className="flex items-center w-full">
         <input
           type="text"
@@ -119,7 +119,7 @@ const SearchBar = () => {
       <div
         className={`bg-pastel-green-100 flex ${
           openNote ? `absolute flex-col` : `hidden`
-        } mt-36 w-[70%] md:w-[65%] lg:w-[38%] rounded-lg p-2 gap-2`}
+        } mt-36 w-[100%] rounded-lg p-2 gap-2`}
       >
         <div
           className={`text-xs ${
@@ -132,7 +132,7 @@ const SearchBar = () => {
           id="inputContent"
           placeholder="Contenido"
           ref={inputRefNote}
-          className="w-[99%] h-full p-2  bg-pastel-green-100 text-xs rounded-md"
+          className="h-full p-2  bg-pastel-green-100 text-xs rounded-md"
           onChange={(event) => {
             setContent(event.target.value);
           }}
